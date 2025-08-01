@@ -8,7 +8,7 @@ import time
 from py_pcha.furthest_sum import furthest_sum
 
 
-def PCHA(X, noc, I=None, U=None, delta=0, verbose=False, conv_crit=1E-6, maxiter=500):
+def PCHA(X, noc, I=None, U=None, delta=0, verbose=False, conv_crit=1E-6, maxiter=500, seed=42):
     """Return archetypes of dataset.
 
     Note: Commonly data is formatted to have shape (examples, dimensions).
@@ -150,7 +150,8 @@ def PCHA(X, noc, I=None, U=None, delta=0, verbose=False, conv_crit=1E-6, maxiter
 
     # Initialize C
     try:
-        i = furthest_sum(X[:, I], noc, [int(np.ceil(len(I) * np.random.rand()))])
+        rng = np.random.default_rng(seed)
+        i = furthest_sum(K=X[:, I], noc=noc, i=[int(np.ceil(len(I) * rng.random()))])
     except IndexError:
         class InitializationException(Exception): pass
         raise InitializationException("Initialization does not converge. Too few examples in dataset.")
